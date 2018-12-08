@@ -3,18 +3,27 @@
 
 Flocon flocon;
 
+/**
+ * Interrupt code.
+ */
 void PWM() {
   flocon.pwm();
 }
 
+/**
+ * Setup the wall system, including timer1 & interrupt freq.
+ */
 void setup() {
   flocon.setup();
   flocon.clear();
 
-  Timer1.initialize(25); // freq (µs)
+  Timer1.initialize(25); // 25 µs ~ 40 kHz => 18 leds => 1 led ~ 2.2 kHz before PWM !
   Timer1.attachInterrupt(PWM);
 }
 
+/**
+ * Repetead animated sequence.
+ */
 void loop() {
 
   const byte maximum = 32;
