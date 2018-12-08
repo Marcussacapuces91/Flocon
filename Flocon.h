@@ -85,8 +85,7 @@ public:
     const byte l = (i == -1) ? rnd % LEDS : i % LEDS;
     const byte v = vals[l];
     vals[l] = 255;
-    delay(10);
-//    delayMicroseconds(1000);
+    delay(25);
     vals[l] = v;
   }
   
