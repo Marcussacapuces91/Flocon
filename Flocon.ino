@@ -37,6 +37,10 @@ void PWM() {
   flocon.pwm();
 }
 
+/**
+ * Compute Vcc by mesuring internal 1.1 ref.
+ * @return Vcc voltage [mV]
+ */
 unsigned readVcc() {
   // set the reference to Vcc and the measurement to the internal 1.1V reference
   ADMUX = _BV(REFS0) | _BV(MUX3) | _BV(MUX2) | _BV(MUX1);
@@ -50,6 +54,31 @@ unsigned readVcc() {
 
   const unsigned result = 1125300UL / mesure; // Calculate Vcc (in mV); 1125300 = 1.1 * 1023 * 1000
   return result; // Vcc in millivolts
+}
+
+/**
+ * Reduce power consumtion to the max 
+ * @see http://www.gammon.com.au/power
+ */
+void sleepDown() {
+// Turn pin INPUT and no pullup.
+  for (byte i = 0; i <= A5; i++) {
+    pinMode (i, INPUT);    // changed as per below
+    digitalWrite (i, LOW);  //     ditto
+  }
+  
+// disable ADC
+  ADCSRA = 0;  
+  
+  set_sleep_mode (SLEEP_MODE_PWR_DOWN);  
+  noInterrupts ();           // timed sequence follows
+  sleep_enable();
+ 
+// turn off brown-out enable in software
+  MCUCR = bit (BODS) | bit (BODSE);
+  MCUCR = bit (BODS); 
+  interrupts ();             // guarantees next instruction executed
+  sleep_cpu ();              // sleep within 3 clock cycles of above  }
 }
 
 /**
@@ -74,15 +103,10 @@ void loop() {
   Serial.print(F("Voltage: "));
   Serial.println(vcc);
 
-  if (vcc < 4800) {
-    set_sleep_mode(SLEEP_MODE_PWR_DOWN);   // sleep mode is set here
-    sleep_enable();          // enables the sleep bit in the mcucr register
-                             // so sleep is possible. just a safety pin    
-    sleep_mode();            // here the device is actually put to sleep!!                             
-  }
-
-/*  
-
+  if (vcc < 3200) 
+    sleepDown();
+  
+// From inside to outside (circular)
   const byte maximum = 32;
   for (int i = 0; i < maximum; ++i) {
     flocon.center(i);
@@ -105,18 +129,16 @@ void loop() {
     flocon.external(maximum - 1 - i);
     delay(10);
   }
-  
   delay(1000);
 
+// Flashing sequence
   for (int i = 0; i < 20; ++i) {
     flocon.flash();
     delay(50);
   }
-  
   delay(1000);
 
-*/
-
+// Left and right
   for (int i = 1; i <= 9; ++i) {
     flocon.vertical(i, 64);
     delay(50);
@@ -128,7 +150,6 @@ void loop() {
     delay(50);
   }
   flocon.clear();
-  delay(250);
-
+  delay(1000);
 
 }
