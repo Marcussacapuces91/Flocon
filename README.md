@@ -11,7 +11,7 @@ I change some details:
 - at the moment, no capacitiv touch to change the program (see [Remember](#remember) ).
 
 ## Licence
-MIT Licence : https://opensource.org/licenses/MIT
+My own software under MIT Licence : https://opensource.org/licenses/MIT
 
 Any issues, pull requests welcome.
 
