@@ -1,13 +1,44 @@
+/**
+ *  Copyright (c) 2018 Marc Sibert
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining
+ *  a copy of this software and associated documentation files (the "Software"),
+ *  to deal in the Software without restriction, including without limitation
+ *  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ *  and/or sell copies of the Software, and to permit persons to whom the Software
+ *  is furnished to do so, subject to the following conditions:
+ *  
+ *  The above copyright notice and this permission notice shall be included in
+ *  all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ *  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ *  OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ *  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ *  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ *  TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+ *  OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * @file Flocon.h
+ * @brief Declare & define Flocon class.
+ * @licence https://opensource.org/licenses/mit-license.php
+ * @author Marc Sibert
+ */
+
 #pragma once
 
 #include <Arduino.h>
 
+
+/**
+ * Class for managing Flocon's hardware by a Arduino.
+ * User should define pinout, using @see LEDS_ORDER.
+ */
 class Flocon {
 public:
 /**
  * Initialize all leds' pins as output and low level. Also zeroing all @vals.
  */
-
   void setup() {
     byte lo[LEDS];
     memcpy_P(&lo, LEDS_ORDER, sizeof(LEDS_ORDER));
@@ -45,6 +76,15 @@ public:
   }
 
 /**
+ * Set a led brightness.
+ * @param led Led rank between [0..17]
+ * @param val Brightness value in [0..255]
+ */
+  void setLed(const byte led, const byte val) {
+    vals[led] = val;
+  }
+
+/**
  * Set central leds brightness.
  * @param val Brightness value in [0.255].
  */
@@ -71,6 +111,52 @@ public:
   void external(const byte val) {
     for (byte i = 12; i < 18 ; ++i) {
       vals[i] = val;
+    }
+  }
+
+  void vertical(const byte rank, const byte val) {
+    clear();
+    switch (rank) {
+      case 1 :
+        setLed(13, val);
+        setLed(14, val);
+        break;
+      case 2 :
+        setLed(7, val);
+        setLed(8, val);
+        break;
+      case 3 :
+        setLed(1, val);
+        break;
+      case 4 :
+        setLed(0, val);
+        setLed(2, val);
+        setLed(6, val/8);
+        setLed(9, val/8);
+        break;
+      case 5 :
+        setLed(12, val);
+        setLed(15, val);
+        setLed(6, val);
+        setLed(9, val);
+        break;
+      case 6 :
+        setLed(3, val);
+        setLed(5, val);
+        setLed(6, val/8);
+        setLed(9, val/8);
+        break;
+      case 7 :
+        setLed(4, val);
+        break;
+      case 8 :
+        setLed(10, val);
+        setLed(11, val);
+        break;
+      case 9 :
+        setLed(16, val);
+        setLed(17, val);
+        break;
     }
   }
 
