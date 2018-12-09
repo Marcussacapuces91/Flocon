@@ -3,7 +3,7 @@
 Directly inspired by [Jiří Praus - Arduinoflake! @ hackster.io](https://www.hackster.io/jiripraus/arduinoflake-139a82)
 
 Here is mine:
-![](https://github.com/Marcussacapuces91/Flocon/blob/master/images/flocon%20-%20top.jpg?raw=true)
+![](https://github.com/Marcussacapuces91/Flocon/blob/master/images/flocon.gif?raw=true)
 
 I change some details:
 - no resistors -> using PWM to reduce power ;
