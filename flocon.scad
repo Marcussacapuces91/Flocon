@@ -23,10 +23,13 @@ module led() {
 *translate([0,0,1.5]) rotate([180,0,0]) flocon();
 
 difference() {
-    cube([1100,1200,25], center=true);
+    cube([1500,1500,25], center=true);
   
-    for (a=[0:5]) rotate([0,0,a*60]) for (i=[1:5], j=[0:i-1]) {
-        translate([j * 50 * sqrt(3), i * 100 - j * 50, 25-19]) rotate([0,0,35-60*a]) cube([51,55,25],center=true);
+    for (a=[0:5]) rotate([0,0,a*60]) {
+        for (i=[1:5], j=[0:i-1]) {
+            translate([j * 50 * sqrt(3), i * 100 - j * 50, 25-19]) rotate([0,0,35-60*a]) cube([51,55,25],center=true);
+            translate([750,0,0]) cube([400,1600,100],center=true);
+        }
     }
     translate([0,0,25-19]) rotate([0,0,35]) cube([51,55,25],center=true);
     
